@@ -1,37 +1,45 @@
 #Python script to pick probes from the user provided consensus region of a DNA seq
-#Inatall primer3, Biopython, re libraries
+#Install primer3, Biopython, re libraries
 #input filename should be test.fasta
-#to add decremental from 5' end
+
+#Import Primer3 library for Primer analysis
 import primer3
+
+#Biopython libraries
 from Bio.Seq import Seq
 from Bio.SeqUtils import GC
 from Bio import SeqIO
+
+#Import Regex 
 import re
+
+#Import Python libraries 
 import collections
 import os
 import sys
 
+#Get the Input file name and current working directory
 ipname = str(sys.argv)
 wkdir = os.getcwd()
 #IPfile1 = wkdir + '/' + str(sys.argv[1])
 IPfile1 = str(sys.argv[1])
 print ("Input File:",IPfile1)
 
-output = open("output_4.txt", "a")
+#Probe parameters
 
+min_len = 15     #minimum length of the probe
+value = 0        #Intializeed value
+prefix_nt = "T"  #spacer nucleotide
+poly_nt = 15     #minimum length ofthe spacer
 
-min_len = 15
-value = 0
-prefix_nt = "T"
-poly_nt = 15
-
+#Read the fasta seq one by one and check whether any non nucleotide is present
 for seq_record in SeqIO.parse(IPfile1, "fasta"):
     probe_bind = str(seq_record.seq.reverse_complement())
-    probe_non_nt = re.search(r"[^ATGC]", probe_bind)
+    probe_non_nt = re.search(r"[^ATGC]", probe_bind) #check for non nucleotide
     if probe_non_nt:
         print('probe is not a nucleotide sequence')
         non_nt = probe_confirm.group()
-        print("The non nt is " + non_nt)
+        print("The non nt is " + non_nt) 
     else:
         probe_list=[]
         long_seq_list=[]
@@ -66,15 +74,6 @@ for seq_record in SeqIO.parse(IPfile1, "fasta"):
     for seq_probe in probe_list:    
         probe = (prefix_nt * poly_nt) + str(seq_probe)
         probe_length = len(probe)
-        #Tm_ori = primer3.calcTm(probe)
-        #Tm_ori2 = ("%.2f" % Tm_ori)
-        #GC_percent_ori = GC(probe)
-        #GC_per_2 = ("%.2f" % GC_percent_ori)
-        #print(seq_record.id + "_" + str(idx) +  "\t" + probe + "\t" + str(GC_per_2) + "\t" +  str(Tm_ori2) + "\t", end = '')
-        #if(probe_length <=40):
-        #    short = short+1
-       # else:
-        #    print("\n")
         if(probe_length <= 60):
             Tm = primer3.calcTm(probe)
             Tm2 = ("%.2f" % Tm)
@@ -84,8 +83,3 @@ for seq_record in SeqIO.parse(IPfile1, "fasta"):
             Hairpin  =  primer3.calcHairpin(probe)
             print(seq_record.id + "_" + str(idx) +  "\t" + probe + "\t" + "\t" + str(GC_per) + "\t" + str(Tm2) + "\t" + str(Hairpin.structure_found) + "\t" + str(Homodimer.structure_found))
         idx = idx+1
-
-
-
-
-output.close()
