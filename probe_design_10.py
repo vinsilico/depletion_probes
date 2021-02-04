@@ -18,6 +18,10 @@ import collections
 import os
 import sys
 
+if len(sys.argv) != 2:
+    print ("Usage: Probe_design.py input.fasta")
+    sys.exit(0)
+
 #Get the Input file name and current working directory
 ipname = str(sys.argv)
 wkdir = os.getcwd()
@@ -54,7 +58,7 @@ for seq_record in SeqIO.parse(IPfile1, "fasta"):
            idx_rc = 0
            idx_fc = 0
            for i in range(0, len(probe_bind)-min_len, 1):
-               probe_list.append(probe_bind[i:i+20])
+               probe_list.append(probe_bind[i:i+25])
                idx_sl = idx_sl + 1
            while probe_bind_len >= min_len:
                probe_rc = probe_rc[:-1]

@@ -1,7 +1,7 @@
 #Python script to pick probes from the user provided consensus region of a DNA seq
-#Inatall primer3, Biopython, re libraries
+#Install primer3, Biopython, re libraries
 #input filename should be test.fasta
-#to add decremental from 5' end
+#NOT CURRENT VERSION - USE  VERSION10
 import primer3
 from Bio.Seq import Seq
 from Bio.SeqUtils import GC
